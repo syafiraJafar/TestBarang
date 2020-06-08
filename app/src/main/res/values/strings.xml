@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TestBarang</string>
+    <string name="app_name">Test Barang</string>
     <string name="btTambah">Tambah Data</string>
     <string name="btLihat">Lihat Data</string>
     <string name="bOk">Submit Data</string>

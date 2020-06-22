@@ -5,10 +5,13 @@ import java.io.Serializable;
 public class Barang implements Serializable {
     private String kode;
     private String nama;
+    private  String key;
 
     public Barang(){
 
     }
+    public String getKey(){return key;}
+    public void setKey(String key){this.key = key;}
     public String getKode(){
         return kode;
     }

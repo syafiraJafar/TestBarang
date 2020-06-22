@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class LihatBarang extends AppCompatActivity {
+public class LihatBarang extends AppCompatActivity implements AdapterLihatBarang.FirebaseDataListener {
     /*
             * Mendefinisikan variable yang akan dipakai
      */
@@ -29,6 +32,9 @@ public class LihatBarang extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /**
+         * Mengeset layout
+         */
         setContentView(R.layout.activity_lihat_barang);
 
         /* Inisialisasi RecyclerView & komponennya
@@ -58,7 +64,7 @@ public class LihatBarang extends AppCompatActivity {
                      * untuk keperluan Edit dan Delete data
                      */
                     Barang barang = noteDataSnapshot.getValue(Barang.class);
-                    barang.setKode(noteDataSnapshot.getKey());
+                    barang.setKey(noteDataSnapshot.getKey());
                     /*
                      * Menambahkan object Barang yang sudah dimapping
                      * ke dalam ArrayList
@@ -89,5 +95,23 @@ public class LihatBarang extends AppCompatActivity {
 
     public static Intent getActIntent(Activity activity){
         return new Intent(activity, LihatBarang.class);
+    }
+
+    @Override
+    public void onDeleteData(Barang barang, int position) {
+        /**
+         * Kode ini akan dipanggil ketika method onDeleteData
+         * dipanggil dari adapter lewat interface.
+         * Yang kemudian akan mendelete data di Firebase Realtime DB
+         * berdasarkan key barang.
+         * Jika sukses akan memunculkan Toast
+         */
+        if (database!=null){database.child("Barang").child(barang.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(LihatBarang.this, "success delete", Toast.LENGTH_LONG).show();
+            }
+        });
+        }
     }
 }
